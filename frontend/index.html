@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>AWS Cloud Club – GGI | Learn • Build • Innovate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --aws-blue: #2563eb;
+            --aws-orange: #f59e0b;
+            --bg-dark: #020617;
+            --text-main: #1e293b;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body { background: #ffffff; color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+        /* ===== CURSOR GLOW ===== */
+        .cursor-glow {
+            position: fixed; width: 300px; height: 300px; border-radius: 50%;
+            pointer-events: none; background: radial-gradient(circle, rgba(37, 99, 235, 0.15), transparent 70%);
+            transform: translate(-50%, -50%); z-index: 9999; mix-blend-mode: multiply; transition: width 0.3s, height 0.3s;
+        }
+
+        /* ===== HERO SECTION ===== */
+        header {
+            position: relative; min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+            padding: 80px 20px; overflow: hidden; background: linear-gradient(to bottom, #f0f7ff, #ffffff);
+        }
+
+        #aws-bg { position: absolute; inset: 0; z-index: 1; }
+        .cloud-container { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+
+        .top-left-logo { position: absolute; top: 20px; left: 20px; z-index: 100; animation: slideDownHero 1s ease-out; }
+        .top-right-logo { position: absolute; top: 20px; right: 20px; z-index: 100; animation: slideDownHero 1s ease-out; }
+        .top-left-logo img, .top-right-logo img { height: 60px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.08)); transition: 0.3s ease; }
+
+        @keyframes slideDownHero { from { transform: translateY(-100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .hero-content { position: relative; z-index: 10; max-width: 900px; animation: slideDownHero 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+        header h1 { font-size: clamp(2.2rem, 8vw, 4.5rem); font-weight: 800; line-height: 1.1; color: var(--aws-blue); margin-bottom: 20px; }
+        header h1 span { color: var(--aws-orange); }
+        header p { font-size: clamp(1rem, 4vw, 1.2rem); color: #475569; margin-bottom: 30px; max-width: 700px; margin-inline: auto; }
+
+        .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; width: 100%; }
+        .btn { padding: 12px 28px; border-radius: 50px; font-weight: 600; text-decoration: none; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: inline-flex; align-items: center; gap: 10px; cursor: pointer; border: none; font-size: 0.95rem; justify-content: center; }
+        .btn-primary { background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); }
+        .btn-outline { border: 2px solid var(--aws-blue); color: var(--aws-blue); background: white; }
+        .btn-hackathon { background: linear-gradient(135deg, #f59e0b, #ea580c); color: white; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3); }
+        
+        .btn:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4); }
+
+        .social-hero { display: flex; gap: 20px; justify-content: center; margin-top: 10px; }
+        .social-hero a { font-size: 1.8rem; transition: 0.3s; }
+        .social-hero .wa { color: #25D366; } .social-hero .ln { color: #0A66C2; } .social-hero .ig { color: #E1306C; }
+
+        .marquee-wrapper { position: relative; z-index: 20; background: #fff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 15px 0; overflow: hidden; white-space: nowrap; }
+        .marquee-content { display: inline-block; animation: marquee 60s linear infinite; }
+        .marquee-content span { font-weight: 600; color: #64748b; margin: 0 30px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        .cloud { position: absolute; background: rgba(255, 255, 255, 0.9); border-radius: 100px; animation: move linear infinite; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        .cloud::before, .cloud::after { content: ''; position: absolute; background: inherit; border-radius: 50%; }
+        @keyframes move { from { transform: translateX(-400px); } to { transform: translateX(calc(100vw + 400px)); } }
+
+        section { padding: 60px 20px; max-width: 1200px; margin: auto; position: relative; }
+        h2 { font-size: clamp(1.8rem, 6vw, 2.5rem); color: var(--aws-blue); margin-bottom: 15px; text-align: center; }
+        .section-sub { text-align: center; color: #64748b; margin-bottom: 40px; font-size: 1rem; }
+
+        /* ===== HACKATHON SECTION ===== */
+        .hackathon-container {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+            border-radius: 30px; padding: 30px; border: 2px solid rgba(37, 99, 235, 0.1);
+            display: grid; grid-template-columns: 1fr; gap: 30px; align-items: start;
+        }
+        @media (min-width: 968px) { .hackathon-container { grid-template-columns: 1.2fr 1fr; padding: 50px; } }
+        .stat-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid var(--aws-orange); }
+        .stat-card strong { display: block; font-size: 1.1rem; color: var(--aws-blue); }
+        .stat-card span { font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase; }
+
+        .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .about-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0; text-align: center; transition: 0.3s; }
+        .about-card i { font-size: 2.5rem; color: var(--aws-blue); margin-bottom: 15px; }
+
+        /* ===== RULE BOOK GRID ===== */
+        .rule-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 30px; }
+        @media (min-width: 768px) { .rule-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); } }
+        .rule-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0; transition: 0.3s; }
+        .rule-card h3 { color: var(--aws-blue); margin-bottom: 12px; font-size: 1rem; }
+        .rule-card li { margin-bottom: 6px; font-size: 0.85rem; color: #475569; position: relative; padding-left: 18px; }
+        .rule-card li::before { content: '•'; position: absolute; left: 0; color: var(--aws-orange); font-weight: bold; }
+
+        /* ===== TEAM CARDS ===== */
+        .team-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 480px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 968px) { .team-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); } }
+        .member-card { background: white; border-radius: 20px; padding: 25px; border: 1px solid #e2e8f0; text-align: center; }
+        .member-img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid #f1f5f9; margin-bottom: 15px; }
+        .member-links { display: flex; gap: 15px; justify-content: center; margin-top: 10px; }
+        .member-links a { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: 0.3s; border: 1.5px solid #e2e8f0; text-decoration: none; }
+        .ml-ln { color: #0A66C2; } .ml-ig { color: #E1306C; }
+
+        /* ===== MODAL & MOBILE FORMS ===== */
+        .modal { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.9); z-index: 10000; display: none; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(8px); }
+        .modal-content { background: #fff; width: 100%; max-width: 600px; border-radius: 25px; padding: 25px; position: relative; max-height: 95vh; overflow-y: auto; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; color: #1e293b; font-size: 0.85rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 16px; outline: none; background: #fff; }
+
+        /* ===== CAMPUS GALLERY ===== */
+        .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 480px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 968px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); } }
+        .gallery-item { position: relative; height: 250px; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; }
+        
+        /* CONTACT PANEL */
+        .contact-section-container { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 40px; }
+        @media (min-width: 968px) { .contact-section-container { grid-template-columns: 1fr 1.5fr; } }
+        .contact-info-panel { background: var(--aws-blue); color: white; padding: 40px; border-radius: 30px; }
+        .contact-links { display: flex; flex-direction: column; gap: 20px; margin-top: 30px; }
+        .contact-links a { color: white; text-decoration: none; display: flex; align-items: center; gap: 15px; font-weight: 500; }
+        .feedback-panel { background: white; padding: 40px; border-radius: 30px; border: 1.5px solid #f1f5f9; }
+
+        footer { padding: 40px 20px; text-align: center; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 0.9rem; }
+
+        /* MOBILE UPDATES */
+        @media (max-width: 768px) {
+            .top-left-logo img, .top-right-logo img { height: 35px; }
+            .top-left-logo { top: 10px; left: 15px; }
+            .top-right-logo { top: 10px; right: 15px; }
+            header { padding-top: 100px; }
+            .cta-btns .btn { width: 100%; }
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="glow"></div>
+
+<div class="modal" id="regModal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()" style="position:absolute; top:20px; right:20px; font-size:1.8rem; cursor:pointer; color:#94a3b8;">&times;</span>
+        <div class="modal-header">
+            <h3 id="modalTitle" style="color:var(--aws-blue); margin-bottom:5px;">Registration</h3>
+            <p id="modalDesc" style="font-size:0.85rem; color:#64748b; margin-bottom:20px;">Join the AWS student community at GGI.</p>
+        </div>
+        <form name="registration" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" id="participationForm">
+            <input type="hidden" name="form-name" value="registration" />
+            
+            <p style="display:none;"><label>Bot Field: <input name="bot-field" /></label></p>
+
+            <div class="form-group">
+                <label>Full Name (First Middle Last)</label>
+                <input type="text" name="full_name" id="regName" placeholder="e.g. Akshay Kumar" list="nameSuggestions" required autocomplete="off">
+                <datalist id="nameSuggestions"></datalist>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr; gap: 0;">
+                <div class="form-group"><label>Email</label><input type="email" name="email" id="regEmail" required placeholder="your@email.com"></div>
+                <div class="form-group"><label>Phone</label><input type="tel" name="phone" id="regPhone" required placeholder="+91..."></div>
+            </div>
+            <div id="hackathonFields">
+                <div class="form-group">
+                    <label>College Type</label>
+                    <select name="college_type" id="regType" onchange="updateUniversityList()">
+                        <option value="" disabled selected>Choose Type</option>
+                        <option value="govt">Government / IIT / NIT</option>
+                        <option value="deemed">Deemed University</option>
+                        <option value="private">Private University</option>
+                        <option value="state">State Technical Univ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Select State</label>
+                    <select name="state" id="regState" onchange="updateUniversityList()">
+                        <option value="" disabled selected>Select State</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Institution</label>
+                    <select name="university" id="regUniversity"><option value="" disabled selected>Select Institution</option></select>
+                </div>
+            </div>
+            <div id="clubFields" style="display: none;">
+                <div class="form-group">
+                    <label>Preferred Role</label>
+                    <select name="preferred_role" id="regRole"><option value="Member">Member</option><option value="Volunteer">Volunteer</option><option value="Technical">Technical Lead</option></select>
+                </div>
+            </div>
+            <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%; margin-top:10px; height: 50px;">Submit Registration</button>
+        </form>
+    </div>
+</div>
+
+<header>
+    <div class="top-left-logo"><img src="ggi.jpg" alt="GGI Logo" onerror="this.src='https://ui-avatars.com/api/?name=GGI&background=2563eb&color=fff'"></div>
+    <div class="top-right-logo"><img src="aws.png" alt="AWS Logo" onerror="this.src='https://ui-avatars.com/api/?name=AWS&background=2563eb&color=fff'"></div>
+    <canvas id="aws-bg"></canvas>
+    <div class="cloud-container" id="cloud-field"></div>
+    <div class="hero-content">
+        <h1>AWS <span>Cloud Club</span> – GGI</h1>
+        <p>Gulzar Group of Institutes, Ludhiana • NAAC Accredited <strong>A+</strong><br>Empowering the next generation of cloud innovators.</p>
+        <div class="cta-btns">
+            <button onclick="openModal('hackathon')" class="btn btn-hackathon">Register For Hackathon</button>
+            <button onclick="openModal('club')" class="btn btn-primary">Join Club</button>
+            <a href="#about" class="btn btn-outline">About Us</a>
+        </div>
+        <div class="social-hero">
+            <a href="https://chat.whatsapp.com/BmciPeOkmTMixczPJQ5VR" target="_blank" class="wa"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.linkedin.com/company/aws-cloud-club-gulzar-group-of-institutes" target="_blank" class="ln"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.instagram.com/awscloudclub_ggi" target="_blank" class="ig"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+</header>
+
+<div class="marquee-wrapper">
+    <div class="marquee-content" id="uniMarquee">
+        <span>IIT Bombay</span><span>IIT Delhi</span><span>IISc Bengaluru</span><span>GGI Ludhiana</span><span>NIT Jalandhar</span><span>PEC Chandigarh</span><span>LPU</span><span>Panjab University</span><span>Thapar Institute</span><span>BITS Pilani</span>
+    </div>
+</div>
+
+<section id="hackathon">
+    <div class="reveal">
+        <h2>🏆 Cloud Hackathon 2026</h2>
+        <p class="section-sub">Innovation, teamwork, and hands-on learning through real-world challenges.</p>
+        <div class="hackathon-container">
+            <div class="hack-info">
+                <h3>The Official GGI Cloud Hackathon</h3>
+                <p>The AWS Cloud Club at Gulzar Group of Institutes (GGI) proudly presents its official Cloud Hackathon, aimed at encouraging innovation using AWS Cloud technologies.</p>
+                <div class="hack-stats" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
+                    <div class="stat-card" style="flex: 1; min-width: 120px;"><strong>₹5,000</strong><span>Prize Pool</span></div>
+                    <div class="stat-card" style="flex: 1; min-width: 120px;"><strong>Exactly 4</strong><span>Team Size</span></div>
+                    <div class="stat-card" style="flex: 1; min-width: 120px;"><strong>₹100</strong><span>Fee / Team</span></div>
+                </div>
+                <div class="cta-btns" style="margin-top:20px;">
+                    <button onclick="openModal('hackathon')" class="btn btn-hackathon" style="flex:1;">Register Your Team Now</button>
+                </div>
+            </div>
+            <div class="hack-perks" style="background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+                <h4 style="margin-bottom: 12px; color: var(--aws-blue);">📌 Eligibility & Specifics</h4>
+                <p style="font-size:0.85rem; color:#64748b; margin-bottom:15px;">Teams with 3 Girls + 1 Boy OR All-Girl teams register for free!</p>
+                <ul style="list-style: none; font-size: 0.85rem;">
+                    <li style="margin-bottom:8px;"><i class="fas fa-check-circle" style="color:var(--aws-orange); margin-right:8px;"></i> <strong>Capacity:</strong> 40 teams only</li>
+                    <li style="margin-bottom:8px;"><i class="fas fa-check-circle" style="color:var(--aws-orange); margin-right:8px;"></i> <strong>Year:</strong> 1st & 2nd year students</li>
+                    <li><i class="fas fa-check-circle" style="color:var(--aws-orange); margin-right:8px;"></i> <strong>College:</strong> Enrolled at GGI</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="participation-rewards">
+    <div class="reveal">
+        <h2>🎯 Participation & Rewards</h2>
+        <div class="about-grid">
+            <div class="about-card">
+                <i class="fas fa-trophy" style="color: #ffd700;"></i>
+                <h3>🥇 Winner (1st)</h3>
+                <p style="font-size:0.85rem;">Winner Trophy, Cash Prize & Official Certificate of Achievement.</p>
+            </div>
+            <div class="about-card">
+                <i class="fas fa-medal" style="color: #c0c0c0;"></i>
+                <h3>🥈 Runner-Up (2nd)</h3>
+                <p style="font-size:0.85rem;">Runner-Up Medal & Official Certificate of Achievement.</p>
+            </div>
+            <div class="about-card">
+                <i class="fas fa-medal" style="color: #cd7f32;"></i>
+                <h3>🥉 Runner-Up (3rd)</h3>
+                <p style="font-size:0.85rem;">Runner-Up Medal & Official Certificate of Achievement.</p>
+            </div>
+            <div class="about-card">
+                <i class="fas fa-certificate" style="color: var(--aws-blue);"></i>
+                <h3>📜 Participation</h3>
+                <p style="font-size:0.85rem;">All participants receive an official digital certificate.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="rule-book">
+    <div class="reveal">
+        <h2>📘 Hackathon Rule Book</h2>
+        <p class="section-sub">Guidelines for fairness, transparency, and technical excellence.</p>
+        <div class="rule-grid">
+            <div class="rule-card"><h3>01. AI Usage</h3><p style="font-size:0.85rem;">Use of AI chatbots, AI code generators, or automation tools is strictly prohibited. Violators will be disqualified.</p></div>
+            <div class="rule-card"><h3>02. Hardware</h3><p style="font-size:0.85rem;">Personal laptops, mobile phones, and external storage (USB) are not allowed. Use only lab systems.</p></div>
+            <div class="rule-card"><h3>03. System Allocation</h3><p style="font-size:0.85rem;">Dedicated PC systems are provided to each team. Accessing unauthorized systems is not permitted.</p></div>
+            <div class="rule-card"><h3>04. Internet Access</h3><p style="font-size:0.85rem;">Access will be limited and monitored. Only permitted resources related to the problem statement are allowed.</p></div>
+            <div class="rule-card"><h3>05. Team Conduct</h3><p style="font-size:0.85rem;">Teams must work independently. Collaboration between different teams leads to immediate disqualification.</p></div>
+            <div class="rule-card"><h3>06. Submission</h3><p style="font-size:0.85rem;">Projects must be submitted within the given timeframe. Late entries will not be accepted for evaluation.</p></div>
+        </div>
+    </div>
+</section>
+
+<section id="about">
+    <div class="reveal">
+        <h2>☁️ What is AWS Cloud Club – GGI?</h2>
+        <p class="section-sub">At Gulzar Group of Institutes, we are building a bridge between classroom learning and cloud excellence.</p>
+        <div class="about-grid">
+            <div class="about-card">
+                <i class="fas fa-university"></i>
+                <h3>Our Mission</h3>
+                <p style="font-size:0.85rem;">Cultivating a robust ecosystem of cloud learning and empowering students with high-impact technical skills.</p>
+            </div>
+            <div class="about-card">
+                <i class="fas fa-certificate"></i>
+                <h3>Certifications</h3>
+                <p style="font-size:0.85rem;">Mentorship and resources to help students achieve global AWS Cloud Practitioner certifications.</p>
+            </div>
+            <div class="about-card">
+                <i class="fas fa-project-diagram"></i>
+                <h3>Hands-on Labs</h3>
+                <p style="font-size:0.85rem;">Members build serverless applications, databases, and AI models directly on global AWS infrastructure.</p>
+            </div>
+            <div class="about-card">
+                <i class="fas fa-briefcase"></i>
+                <h3>Industry Connect</h3>
+                <p style="font-size:0.85rem;">Bridging the gap between college and career through interaction with AWS professionals and experts.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="leaders">
+    <div class="reveal">
+        <h2>🚀 Our Core Team</h2>
+        <p class="section-sub">Student leaders building the cloud ecosystem at GGI.</p>
+        <div class="team-grid">
+            <div class="member-card">
+                <img src="durga.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Durga+Gupta&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Durga Shankar Gupta</h3><p>Cloud Captain</p>
+                    <div class="member-links"><a href="https://www.linkedin.com/in/durga-shankar-gupta-16508829a" target="_blank" class="ml-ln"><i class="fab fa-linkedin"></i></a></div>
+                </div>
+            </div>
+            <div class="member-card">
+                <img src="nitin.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Nitin+Neeraj&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Nitin Neeraj</h3><p>Operations Lead</p></div>
+            </div>
+            <div class="member-card">
+                <img src="gurleen.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Gurleen+Sahota&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Gurleen Sahota</h3><p>Content Lead</p></div>
+            </div>
+            <div class="member-card">
+                <img src="ranjeet.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Ranjeet+Pandey&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Ranjeet Pandey</h3><p>Social Media Lead</p></div>
+            </div>
+            <div class="member-card">
+                <img src="risha.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Risha+Maurya&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Risha Maurya</h3><p>Event Mgmt</p></div>
+            </div>
+            <div class="member-card">
+                <img src="ritik.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Ritik+Raj&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Ritik Raj</h3><p>IT Support</p></div>
+            </div>
+            <div class="member-card">
+                <img src="anand.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Anand+Raj&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Anand Raj</h3><p>Outreach</p></div>
+            </div>
+            <div class="member-card">
+                <img src="devraj.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Kumar+Devraj&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Kumar Devraj</h3><p>Technical Lead</p></div>
+            </div>
+            <div class="member-card">
+                <img src="aman.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Aman+Kumar&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Aman Kumar</h3><p>Tech Co-Lead</p></div>
+            </div>
+            <div class="member-card">
+                <img src="amanverma.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Aman+Verma&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Aman Verma</h3><p>Support Lead</p></div>
+            </div>
+            <div class="member-card">
+                <img src="abid.jpg" class="member-img" onerror="this.src='https://ui-avatars.com/api/?name=Abid+Ali&background=2563eb&color=fff'">
+                <div class="member-info"><h3>Abid Ali</h3><p>Support Co-Lead</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="gallery">
+    <div class="reveal">
+        <h2>🏫 Campus & Club Life</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="campus1.jpg" alt="Lab" onerror="this.src='https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800'"></div>
+            <div class="gallery-item"><img src="campus2.jpg" alt="Team" onerror="this.src='https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800'"></div>
+            <div class="gallery-item"><img src="campus3.jpg" alt="Campus" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&w=800'"></div>
+            <div class="gallery-item"><img src="campus4.jpg" alt="Tech" onerror="this.src='https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800'"></div>
+        </div>
+    </div>
+</section>
+
+<section id="contact">
+    <div class="reveal">
+        <div class="contact-section-container">
+            <div class="contact-info-panel">
+                <h2 style="color:white; text-align:left;">Connect With Us</h2>
+                <div class="contact-links">
+                    <a href="mailto:awscloudclub.ggi@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+                    <a href="https://chat.whatsapp.com/BmciPeOkmTMixczPJQ5VR" target="_blank"><i class="fab fa-whatsapp"></i> Community</a>
+                    <a href="tel:+918873353652"><i class="fas fa-phone-alt"></i> +91 88733 53652</a>
+                </div>
+            </div>
+            <div class="feedback-panel">
+                <h2 style="text-align:left; font-size:1.5rem; color:var(--aws-blue);">Inquiry</h2>
+                <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" class="feedback-form" id="getInTouchForm">
+                    <input type="hidden" name="form-name" value="contact" />
+                    
+                    <p style="display:none;"><label>Bot Field: <input name="bot-field" /></label></p>
+
+                    <div class="form-group"><input type="text" name="name" required placeholder="Full Name"></div>
+                    <div class="form-group"><input type="email" name="email" required placeholder="Email Address"></div>
+                    <div class="form-group"><input type="tel" name="phone" required placeholder="Phone Number"></div>
+                    <div class="form-group"><textarea name="question" rows="3" required placeholder="Your Question"></textarea></div>
+                    <button type="submit" class="btn btn-primary" style="width:100%;">Submit Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer><p>© 2026 AWS Cloud Club – Gulzar Group of Institutes. All Rights Reserved.</p></footer>
+
+<script>
+    (function() {
+        // UNIVERSITY DATABASE
+        const universityData = {
+            govt: ["IIT Bombay", "IIT Delhi", "IIT Madras", "IIT Kanpur", "IIT Kharagpur", "IIT Roorkee", "IIT Guwahati", "IIT Bhubaneswar", "IIT Gandhinagar", "IIT Hyderabad", "IIT Jodhpur", "IIT Patna", "IIT Ropar", "IIT Indore", "IIT Mandi", "IIT Palakkad", "IIT Tirupati", "IIT Bhilai", "IIT Goa", "IIT Jammu", "IIT Dharwad", "NIT Tiruchirappalli", "NIT Surathkal", "NIT Warangal", "NIT Calicut", "NIT Rourkela", "NIT Jalandhar", "IISc Bengaluru", "IISER Mohali", "Delhi University"],
+            deemed: ["BITS Pilani", "VIT Vellore", "SRM IST", "Manipal Academy", "Amrita Vishwa Vidyapeetham", "Thapar Institute", "Symbiosis International", "LPU (Deemed status)"],
+            private: ["Lovely Professional University", "Chandigarh University", "Amity University Noida", "Shiv Nadar University", "Ashoka University", "Galgotias University", "Bennett University", "Chitkara University Punjab", "Jain University"],
+            state: ["I.K. Gujral Punjab Technical University", "Maharaja Ranjit Singh Punjab Technical University", "AKTU Lucknow", "RTU Rajasthan", "GTU Gujarat", "VTU Karnataka"]
+        };
+
+        // Form Logic
+        const nameInput = document.getElementById('regName');
+        nameInput.addEventListener('input', function() {
+            const list = document.getElementById('nameSuggestions');
+            list.innerHTML = ''; const val = this.value.trim(); if(val.length < 2) return;
+            const fv = val.charAt(0).toUpperCase() + val.slice(1);
+            [fv, `${fv} Kumar`, `${fv} Singh`, `${fv} Sharma`].forEach(o => { const op = document.createElement('option'); op.value = o; list.appendChild(op); });
+        });
+
+        const modal = document.getElementById('regModal');
+        window.openModal = (type) => {
+            modal.style.display = 'flex';
+            const h = document.getElementById('hackathonFields');
+            const c = document.getElementById('clubFields');
+            if(type === 'club'){ h.style.display = 'none'; c.style.display = 'block'; document.getElementById('modalTitle').innerText = "Join Club"; }
+            else { h.style.display = 'block'; c.style.display = 'none'; document.getElementById('modalTitle').innerText = "Hackathon Entry"; }
+        };
+        window.closeModal = () => modal.style.display = 'none';
+
+        window.updateUniversityList = () => {
+            const type = document.getElementById('regType').value;
+            const state = document.getElementById('regState').value;
+            const uni = document.getElementById('regUniversity');
+            uni.innerHTML = '<option value="" disabled selected>Select Institution</option>';
+            if(state === "Punjab"){ const g = document.createElement('option'); g.value="GGI"; g.textContent="GGI Ludhiana (Host)"; uni.appendChild(g); }
+            if(type && universityData[type]){
+                universityData[type].forEach(u => { const op = document.createElement('option'); op.value=u; op.textContent=u; uni.appendChild(op); });
+            }
+        };
+
+        // Canvas Background Animation
+        const canvas = document.getElementById('aws-bg');
+        const ctx = canvas.getContext('2d');
+        let cW, cH, particles;
+        function resize() { 
+            cW = canvas.width = window.innerWidth; 
+            cH = canvas.height = document.querySelector('header').offsetHeight; 
+        }
+        function init() { 
+            particles = []; 
+            for(let i=0; i<Math.floor((cW*cH)/15000); i++) 
+                particles.push({x:Math.random()*cW, y:Math.random()*cH, r:1.2, vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3}); 
+        }
+        function anim() { 
+            ctx.clearRect(0,0,cW,cH); 
+            ctx.fillStyle='rgba(37, 99, 235, 0.4)'; 
+            particles.forEach((p)=>{ 
+                p.x+=p.vx; p.y+=p.vy; 
+                if(p.x<0||p.x>cW) p.vx*=-1; 
+                if(p.y<0||p.y>cH) p.vy*=-1; 
+                ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); 
+            }); 
+            requestAnimationFrame(anim); 
+        }
+        window.addEventListener('resize', ()=>{resize(); init();}); 
+        resize(); init(); anim();
+
+        // Cursor Glow
+        const glow = document.getElementById('glow');
+        window.addEventListener('mousemove', e => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+
+        // Floating Clouds
+        const cf = document.getElementById('cloud-field');
+        for(let i=0; i < 40; i++){
+            const c = document.createElement('div'); c.className = 'cloud';
+            const w = 150 + Math.random() * 300; 
+            c.style.width = w + 'px'; c.style.height = (w * 0.4) + 'px';
+            c.style.top = (Math.random() * 100) + '%'; c.style.left = (Math.random() * 100) - 20 + '%';
+            c.style.animationDuration = (35 + Math.random() * 50) + 's'; c.style.opacity = 0.1 + Math.random() * 0.4;
+            cf.appendChild(c);
+        }
+
+        // Scroll Reveal
+        const reveal = () => document.querySelectorAll('.reveal').forEach(r => { 
+            if(r.getBoundingClientRect().top < window.innerHeight-100) r.classList.add('active'); 
+        });
+        window.addEventListener('scroll', reveal); 
+        window.addEventListener('load', reveal);
+    })();
+</script>
+<!-- ================= RANJEET AI CHATBOT ================= -->
+
+<div id="aws-ai-icon" onclick="toggleChat()">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg">
+</div>
+
+<div id="ai-chat">
+  <div class="ai-header">
+    🤖 Ranjeet AI
+    <span onclick="toggleChat()">✖</span>
+  </div>
+
+  <div class="ai-body" id="ai-body">
+    <div class="ai-msg">
+      Hi 👋 I’m <b>Ranjeet AI</b>.<br>
+      Ask me about the AWS Cloud Club Hackathon 🚀
+    </div>
+  </div>
+
+  <div class="ai-typing hidden" id="ai-typing">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="ai-input">
+    <input id="ai-input" placeholder="Ask something..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<style>
+/* ICON */
+#aws-ai-icon{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 62px;
+  height: 62px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 12px 35px rgba(0,0,0,.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9999;
+  transition: transform .4s ease;
+}
+#aws-ai-icon img{ width:36px }
+
+/* CHAT BOX */
+#ai-chat{
+  position: fixed;
+  bottom: 95px;
+  right: 20px;
+  width: 340px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(0,0,0,.3);
+  display: none;
+  flex-direction: column;
+  animation: pop .4s ease;
+  z-index: 9999;
+}
+
+@keyframes pop{
+  from{ transform:scale(.6); opacity:0 }
+  to{ transform:scale(1); opacity:1 }
+}
+
+.ai-header{
+  background:#2563eb;
+  color:#fff;
+  padding:12px;
+  font-weight:bold;
+  display:flex;
+  justify-content:space-between;
+  border-radius:16px 16px 0 0;
+}
+
+.ai-body{
+  height:240px;
+  overflow-y:auto;
+  padding:10px;
+  font-size:14px;
+}
+
+.ai-msg{
+  background:#eef2ff;
+  padding:8px 10px;
+  border-radius:10px;
+  margin-bottom:8px;
+  width:fit-content;
+}
+
+.user-msg{
+  background:#2563eb;
+  color:#fff;
+  padding:8px 10px;
+  border-radius:10px;
+  margin-bottom:8px;
+  margin-left:auto;
+  width:fit-content;
+}
+
+/* INPUT */
+.ai-input{
+  display:flex;
+  border-top:1px solid #ddd;
+}
+.ai-input input{
+  flex:1;
+  padding:10px;
+  border:none;
+  outline:none;
+}
+.ai-input button{
+  background:#2563eb;
+  color:#fff;
+  border:none;
+  padding:0 16px;
+  cursor:pointer;
+}
+
+/* TYPING */
+.ai-typing{
+  display:flex;
+  padding:6px 12px;
+  gap:5px;
+}
+.ai-typing span{
+  width:6px;
+  height:6px;
+  background:#2563eb;
+  border-radius:50%;
+  animation: blink 1.4s infinite;
+}
+.ai-typing span:nth-child(2){animation-delay:.2s}
+.ai-typing span:nth-child(3){animation-delay:.4s}
+
+.hidden{display:none}
+
+@keyframes blink{
+  0%{opacity:.2}
+  20%{opacity:1}
+  100%{opacity:.2}
+}
+</style>
+
+<script>
+const fixedQA = [
+  {
+    q: ["eligible", "who can participate"],
+    a: "Only 1st and 2nd year students of Gulzar Group of Institutes (GGI) are eligible to participate 🎓"
+  },
+  {
+    q: ["team size", "registration fee"],
+    a: "Each team must have exactly 4 members. Registration fee is ₹100 per team. Teams with 3 girls + 1 boy or all girls get free registration 💡"
+  },
+  {
+    q: ["laptop", "mobile", "ai tools"],
+    a: "Personal laptops, mobile phones, and AI tools are strictly prohibited. Only the allocated lab PCs may be used 🚫"
+  },
+  {
+    q: ["prize", "certificate"],
+    a: "Winner receives a trophy or cash prize, 2nd & 3rd teams get medals, and all participants receive certificates 🏆"
+  }
+];
+
+function toggleChat(){
+  const chat = document.getElementById("ai-chat");
+  const icon = document.getElementById("aws-ai-icon");
+  chat.style.display = chat.style.display === "flex" ? "none" : "flex";
+  icon.style.transform = "rotate(360deg)";
+  setTimeout(()=>icon.style.transform="",400);
+}
+
+async function sendMessage(){
+  const input = document.getElementById("ai-input");
+  const body = document.getElementById("ai-body");
+  const typing = document.getElementById("ai-typing");
+
+  const msg = input.value.trim();
+  if(!msg) return;
+
+  body.innerHTML += `<div class="user-msg">${msg}</div>`;
+  input.value = "";
+  body.scrollTop = body.scrollHeight;
+
+  typing.classList.remove("hidden");
+
+  const lower = msg.toLowerCase();
+  const saved = fixedQA.find(f => f.q.some(k => lower.includes(k)));
+
+  setTimeout(async ()=>{
+    typing.classList.add("hidden");
+
+    if(saved){
+      body.innerHTML += `<div class="ai-msg"><b>Ranjeet AI:</b> ${saved.a}</div>`;
+    } else {
+      const res = await fetch("http://localhost:3000/ask",{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({ message: msg })
+      });
+      const data = await res.json();
+      body.innerHTML += `<div class="ai-msg"><b>Ranjeet AI:</b> ${data.reply}</div>`;
+    }
+    body.scrollTop = body.scrollHeight;
+  }, 900);
+}
+</script>
+
+<!-- ================= END RANJEET AI ================= -->
+
+</body>
+</html>
